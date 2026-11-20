@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Collage</title>
+    <link rel="icon" href="/assets/icon-32.png" />
+  </head>
+  <body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none" aria-hidden="true">
+      <symbol id="logo" viewBox="0 0 32 32">
+        <rect width="32" height="32" rx="7" fill="#0B0B0B" />
+        <rect x="5" y="5" width="13" height="9" rx="1.5" fill="#FCFCF9" />
+        <rect x="20" y="5" width="7" height="9" rx="1.5" fill="#D85A30" />
+        <rect x="5" y="16" width="7" height="11" rx="1.5" fill="#A1A1AA" />
+        <rect x="14" y="16" width="13" height="11" rx="1.5" fill="#FCFCF9" />
+      </symbol>
+    </svg>
+
+    <div class="app-layout">
+      <aside class="sidebar">
+        <header class="sidebar-header">
+          <div class="brand-row">
+            <div class="brand-left">
+              <svg class="logo" aria-hidden="true"><use href="#logo" /></svg>
+              <span class="eyebrow"><span id="siteLabel">COLLAGE</span> <span class="sep">·</span> <span id="kindLabel">…</span></span>
+            </div>
+            <span class="chip status-live" id="statusChip">
+              <span class="status-dot"></span>
+              <span id="statusText">Reading</span>
+            </span>
+          </div>
+          <h1 class="sidebar-title" id="title">Reading the tab…</h1>
+          <p class="sidebar-lede">Every row spans the sheet flush, nothing cropped. The download holds the photos and nothing else.</p>
+        </header>
+
+        <div class="sidebar-body">
+          <!-- 001 SOURCE -->
+          <section>
+            <div class="section-rule">
+              <span class="num">001</span>
+              <span>Source</span>
+              <span class="line"></span>
+              <span class="count" id="sourceBadge">—</span>
+            </div>
+            <p class="progress-line" id="progressLine">Waiting for the page…</p>
+            <p class="progress-note" id="progressNote"></p>
+            <div class="source-row" id="profileControls" hidden>
+              <label class="control-label" for="wantInput">Photos to collect</label>
+              <input type="number" class="num-input" id="wantInput" min="1" max="2000" step="10" value="100" />
+              <button type="button" class="btn btn-secondary btn-sm" id="walkBtn">Stop</button>
+            </div>
+          </section>
+
+          <!-- 002 PHOTOS -->
+          <section>
+            <div class="section-rule">
+              <span class="num">002</span>
+              <span>Photos</span>
+              <span class="line"></span>
+              <span class="count" id="photoCountBadge">0 PHOTOS</span>
+            </div>
+            <p class="progress-note">Drag to reorder, ✕ to leave one out. Shift-drag on the sheet works too.</p>
+            <div class="photo-strip" id="photoStrip"></div>
+          </section>
+
+          <!-- 003 LAYOUT -->
+          <section>
+            <div class="section-rule">
+              <span class="num">003</span>
+              <span>Justified Layout (DP)</span>
+              <span class="line"></span>
+              <span class="count" id="dpModeBadge">TARGET H</span>
+            </div>
+
+            <div class="control-group">
+              <div>
+                <div class="control-header">
+                  <span class="control-label">Row Sizing Mode</span>
+                  <span class="mono-flag">ideal_h</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px">
+                  <button type="button" class="btn btn-secondary btn-sm" id="modeAutoSqrtBtn" title="Aim for √n photos per row: a square grid, 10×10 for 100">Auto √n Grid</button>
+                  <button type="button" class="btn btn-secondary btn-sm" id="modeFixedRowBtn" title="Aim for a preferred row height">Target Row Height</button>
+                </div>
+              </div>
+
+              <div>
+                <div class="control-header">
+                  <label class="control-label" for="widthInput">Content Width <span class="mono-flag">--width</span></label>
+                  <input type="number" class="num-input" id="widthInput" min="600" max="7200" step="100" value="3600" />
+                </div>
+                <input type="range" id="widthSlider" min="800" max="6000" step="100" value="3600" />
+              </div>
+
+              <div id="rowHeightControlWrap">
+                <div class="control-header">
+                  <label class="control-label" for="rowHeightInput">Preferred Row Height <span class="mono-flag">--row-height</span></label>
+                  <input type="number" class="num-input" id="rowHeightInput" min="150" max="3000" step="25" value="1150" />
+                </div>
+                <input type="range" id="rowHeightSlider" min="200" max="2400" step="25" value="1150" />
+              </div>
+
+              <div>
+                <div class="control-header">
+                  <label class="control-label" for="gapInput">Gutter Gap <span class="mono-flag">--gap</span></label>
+                  <input type="number" class="num-input" id="gapInput" min="0" max="200" step="2" value="18" />
+                </div>
+                <input type="range" id="gapSlider" min="0" max="100" step="2" value="18" />
+              </div>
+
+              <div>
+                <div class="control-header">
+                  <label class="control-label" for="marginInput">Outer Margin <span class="mono-flag">--margin</span></label>
+                  <input type="number" class="num-input" id="marginInput" min="0" max="300" step="4" value="36" />
+                </div>
+                <input type="range" id="marginSlider" min="0" max="160" step="4" value="36" />
+              </div>
+
+              <div class="control-header" style="margin-top: 2px">
+                <span class="control-label">Sheet Background</span>
+                <div class="swatch-row" id="bgSwatches">
+                  <button type="button" class="swatch active" data-bg="#FFFFFF" style="background: #ffffff" title="Pure White"></button>
+                  <button type="button" class="swatch" data-bg="#FCFCF9" style="background: #fcfcf9" title="Warm Paper"></button>
+                  <button type="button" class="swatch" data-bg="#F4F4F5" style="background: #f4f4f5" title="Cool Zinc"></button>
+                  <button type="button" class="swatch" data-bg="#0B0B0B" style="background: #0b0b0b" title="Editorial Ink"></button>
+                  <button type="button" class="swatch swatch-transparent" data-bg="transparent" title="Transparent (WebP and PNG; JPG gets white)"></button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 004 EXPORT -->
+          <section style="margin-top: auto">
+            <div class="section-rule">
+              <span class="num">004</span>
+              <span>Export Collage</span>
+              <span class="line"></span>
+              <span class="count" id="exportExtBadge">WEBP</span>
+            </div>
+
+            <div class="control-group">
+              <div class="format-tabs" id="formatTabs" role="radiogroup" aria-label="Export format">
+                <button type="button" class="format-tab active" data-format="image/webp" data-ext="webp">
+                  <span class="format-tab-name">WebP</span>
+                  <span class="format-tab-desc">Smallest · ≤16,383 px</span>
+                </button>
+                <button type="button" class="format-tab" data-format="image/jpeg" data-ext="jpg">
+                  <span class="format-tab-name">JPG</span>
+                  <span class="format-tab-desc">Uploads anywhere</span>
+                </button>
+                <button type="button" class="format-tab" data-format="image/png" data-ext="png">
+                  <span class="format-tab-name">PNG</span>
+                  <span class="format-tab-desc">Lossless</span>
+                </button>
+              </div>
+
+              <div id="qualityWrap">
+                <div class="control-header">
+                  <label class="control-label" for="qualitySlider">Quality <span class="mono-flag">--quality</span></label>
+                  <span class="mono-flag" id="qualityValLabel">92%</span>
+                </div>
+                <input type="range" id="qualitySlider" min="10" max="100" value="92" />
+              </div>
+
+              <div class="export-readout">
+                <div class="export-readout-row">
+                  <span class="export-readout-label">CANVAS SIZE</span>
+                  <span class="export-readout-val" id="readoutCanvasSize">—</span>
+                </div>
+                <div class="export-readout-row">
+                  <span class="export-readout-label">DP ROW PLAN</span>
+                  <span class="export-readout-val" id="readoutRowPlan">—</span>
+                </div>
+                <div class="export-readout-row">
+                  <span class="export-readout-label">IDEAL ROW H</span>
+                  <span class="export-readout-val" id="readoutIdealH">—</span>
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-action" id="downloadBtn" disabled>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                <span id="downloadBtnText">Download Collage (.webp)</span>
+              </button>
+            </div>
+          </section>
+        </div>
+      </aside>
+
+      <main class="infinite-viewport" id="infiniteViewport">
+        <canvas id="viewportCanvas"></canvas>
+
+        <div class="hud-top">
+          <div class="hud-pill" id="hudPlanSummary"><span><strong>0</strong> photos</span></div>
+          <div class="hud-pill" id="hudHoverInfo"><span>Drag to pan · Scroll to zoom · Shift-drag a photo to reorder</span></div>
+        </div>
+
+        <div class="hud-bottom">
+          <div class="zoom-dock">
+            <button type="button" class="btn btn-secondary btn-sm" id="zoomOutBtn" title="Zoom out">−</button>
+            <span class="zoom-readout" id="zoomReadout" title="Fit the sheet to the screen">100%</span>
+            <button type="button" class="btn btn-secondary btn-sm" id="zoomInBtn" title="Zoom in">+</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="fitScreenBtn" title="Fit the whole sheet">Fit Sheet</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="actualPixelsBtn" title="Zoom to 100% of the output's pixels">1:1 px</button>
+          </div>
+          <div class="hud-pill" id="hudWorldCoords">Canvas: —</div>
+        </div>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
